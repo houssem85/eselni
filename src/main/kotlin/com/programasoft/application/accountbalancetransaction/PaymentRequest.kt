@@ -18,7 +18,7 @@ data class PaymentRequest(
     val email: String,
     val phone: String,
     val note: String,
-    val amount: Double,
+    val amount: Float,
     @JsonProperty("transaction_id")
     val transactionId: Int,
     @JsonProperty("received_amount")
