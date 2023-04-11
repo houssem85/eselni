@@ -1,6 +1,7 @@
 package com.programasoft.application.advocate
 
 import com.programasoft.application.account.Account
+import com.programasoft.application.availability.AvailabilityGroup
 import com.programasoft.application.bankaccount.BankAccount
 import com.programasoft.application.certificate.Certificate
 import jakarta.persistence.*
@@ -39,7 +40,7 @@ data class Advocate(
     var legalAreas: Set<LegalArea> = emptySet(),
     @OneToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_id")
-    val bankAccount: BankAccount
+    val bankAccount: BankAccount,
 )
 
 /**
