@@ -15,7 +15,7 @@ data class Reservation(
     @JoinColumn(name = "client_id")
     val client: Client,
     @Column(name = "date")
-    var date: LocalDateTime,
+    var date: LocalDateTime = LocalDateTime.now(),
     @OneToMany(mappedBy = "reservation", cascade = [CascadeType.ALL], orphanRemoval = true)
     var availabilityUnits: Set<AvailabilityUnit> = emptySet()
 )

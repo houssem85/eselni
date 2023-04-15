@@ -1,6 +1,7 @@
 package com.programasoft.application.accountbalancetransaction
 
 import com.programasoft.application.account.Account
+import com.programasoft.application.reservation.Reservation
 import jakarta.persistence.*
 import java.util.*
 
@@ -20,7 +21,10 @@ data class AccountBalanceTransaction(
     val transactionId: String?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
-    val account: Account?
+    val account: Account?,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    val reservation: Reservation? = null
 )
 
 /**

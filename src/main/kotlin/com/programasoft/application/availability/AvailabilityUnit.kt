@@ -11,7 +11,7 @@ data class AvailabilityUnit(
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(
         name = "availability_id",
         referencedColumnName = "id"
-    ) val availability: Availability,
+    ) val availability: Availability?,
     @Column(name = "start")
     var start: LocalDateTime,
     @Column(name = "end")

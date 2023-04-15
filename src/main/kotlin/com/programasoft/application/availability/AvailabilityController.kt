@@ -1,6 +1,7 @@
 package com.programasoft.application.availability
 
 import com.programasoft.application.advocate.AdvocateService
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -144,6 +145,18 @@ class AvailabilityController(
             it.toString()
         }
         return ResponseEntity.ok(availableDays)
+    }
+
+    @GetMapping("/available-units")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAvailabilityUnits(
+        @RequestParam("advocateId") advocateId: Long,
+        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate
+    ): List<AvailabilityUnit> {
+        val units = availabilityService.getAvailabilityUnitsByAdvocateAndDate(advocateId, date)
+        return units.map {
+            it.copy(availability = null)
+        }
     }
 
 }

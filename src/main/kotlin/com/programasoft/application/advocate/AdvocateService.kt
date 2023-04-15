@@ -23,4 +23,10 @@ class AdvocateService(
         advocateRepository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     fun getAll(): List<Advocate> = advocateRepository.findAll()
+
+    fun getAdvocateByAvailabilityUnitId(availabilityUnitId: Long): Advocate {
+        return advocateRepository.findAdvocateByAvailabilityUnitId(availabilityUnitId) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND
+        )
+    }
 }

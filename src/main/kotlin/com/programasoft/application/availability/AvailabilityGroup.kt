@@ -16,8 +16,6 @@ data class AvailabilityGroup(
     @Column(name = "end_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val endDate: LocalDate,
-    @OneToMany(mappedBy = "availabilityGroup", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val availabilities: List<Availability> = emptyList(),
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "advocate_id", referencedColumnName = "id")
     val advocate: Advocate
 )

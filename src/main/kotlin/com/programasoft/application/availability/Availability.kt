@@ -8,13 +8,10 @@ import java.time.LocalDateTime
 @Table(name = "availability")
 data class Availability(
     @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "availability_group_id", referencedColumnName = "id")
-    val availabilityGroup: AvailabilityGroup,
-    @Column(name = "start")
-    var start: LocalDateTime,
-    @Column(name = "end")
-    var end: LocalDateTime,
-    @OneToMany(mappedBy = "availability", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val availabilityUnits: List<AvailabilityUnit> = arrayListOf(),
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(
+        name = "availability_group_id",
+        referencedColumnName = "id"
+    ) val availabilityGroup: AvailabilityGroup,
+    @Column(name = "start") var start: LocalDateTime,
+    @Column(name = "end") var end: LocalDateTime,
 )

@@ -1,6 +1,9 @@
 package com.programasoft.application.availability
 
+import com.programasoft.application.account.Account
 import com.programasoft.application.advocate.Advocate
+import com.programasoft.application.reservation.Reservation
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
@@ -53,5 +56,23 @@ class AvailabilityService(
             month = month,
             year = year
         )
+    }
+
+    fun getAvailabilityUnitsByAdvocateAndDate(advocateId: Long, date: LocalDate): List<AvailabilityUnit> {
+        return availabilityUnitRepository.findByAdvocateIdAndDate(advocateId, date)
+    }
+
+    fun updateAvailabilityUnitReservation(availabilityUnitId: Long, reservation: Reservation): AvailabilityUnit {
+        val availabilityUnit = availabilityUnitRepository.findById(availabilityUnitId)
+            .orElseThrow { EntityNotFoundException("AvailabilityUnit with id $availabilityUnitId not found") }
+        return availabilityUnitRepository.save(
+            availabilityUnit.copy(
+                reservation = reservation
+            )
+        )
+    }
+
+    fun getAllByReservationId(reservationId: Long): List<AvailabilityUnit> {
+        return availabilityUnitRepository.findAllByReservationId(reservationId)
     }
 }
