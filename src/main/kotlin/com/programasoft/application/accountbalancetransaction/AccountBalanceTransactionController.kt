@@ -1,9 +1,8 @@
 package com.programasoft.application.accountbalancetransaction
 
 import com.programasoft.application.account.Account
-import com.programasoft.application.advocate.AdvocateService
+import com.programasoft.application.psychologist.PsychologistService
 import com.programasoft.application.availability.AvailabilityService
-import com.programasoft.application.client.ClientService
 import com.programasoft.application.reservation.ReservationService
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
@@ -17,7 +16,7 @@ import java.util.*
 class AccountBalanceTransactionController(
     private val accountBalanceTransactionService: AccountBalanceTransactionService,
     private val reservationService: ReservationService,
-    private val advocateService: AdvocateService,
+    private val psychologistService: PsychologistService,
     private val availabilityService: AvailabilityService,
 ) {
 
@@ -47,8 +46,8 @@ class AccountBalanceTransactionController(
         val reservation = reservationService.getById(reservationId)
         val client = reservation.client
         val availabilityUnits = availabilityService.getAllByReservationId(reservation.id)
-        val advocate = advocateService.getAdvocateByAvailabilityUnitId(availabilityUnits.first().id)
-        val availabilityUnitRate = advocate.hourlyRate / 2
+        val psychologist = psychologistService.getPsychologistByAvailabilityUnitId(availabilityUnits.first().id)
+        val availabilityUnitRate = psychologist.hourlyRate / 2
         val totalAmountToPay = availabilityUnitRate * availabilityUnits.size
         val currentClientBalance = accountBalanceTransactionService.getCurrentBalance(client.account.id)
         if (totalAmountToPay <= currentClientBalance) {
@@ -67,7 +66,7 @@ class AccountBalanceTransactionController(
                 amount = totalAmountToPay,
                 groupId = uuid,
                 type = TransactionType.RESERVATION_PAYMENT,
-                account = advocate.account,
+                account = psychologist.account,
                 transactionId = null,
                 reservation = reservation
             )

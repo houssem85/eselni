@@ -1,6 +1,6 @@
 package com.programasoft.application.certificate
 
-import com.programasoft.application.advocate.Advocate
+import com.programasoft.application.psychologist.Psychologist
 import com.programasoft.application.registrationrequest.RegistrationRequest
 import org.springframework.stereotype.Service
 
@@ -20,29 +20,29 @@ class CertificateService(
                 title = it.title,
                 description = it.description,
                 image = it.image,
-                advocate = null,
+                psychologist = null,
                 registrationRequest = null
             )
             certificate
         }.toSet()
     }
 
-    fun findByAdvocate(advocate: Advocate): Set<Certificate> {
-        return repository.findByAdvocate(advocate).map {
+    fun findByPsychologist(psychologist: Psychologist): Set<Certificate> {
+        return repository.findByPsychologist(psychologist).map {
             val certificate = Certificate(
                 id = it.id,
                 title = it.title,
                 description = it.description,
                 image = it.image,
-                advocate = null,
+                psychologist = null,
                 registrationRequest = null
             )
             certificate
         }.toSet()
     }
 
-    fun updateCertificateWithAdvocate(id: Long, advocate: Advocate) {
+    fun updateCertificateWithPsychologist(id: Long, psychologist: Psychologist) {
         val certificate = repository.findById(id).orElseThrow()
-        repository.save(certificate.copy(advocate = advocate))
+        repository.save(certificate.copy(psychologist = psychologist))
     }
 }

@@ -2,7 +2,7 @@ package com.programasoft.application.account
 
 import com.programasoft.application.accountbalancetransaction.AccountBalanceTransactionService
 import com.programasoft.application.administrator.AdministratorService
-import com.programasoft.application.advocate.AdvocateService
+import com.programasoft.application.psychologist.PsychologistService
 import com.programasoft.application.client.ClientService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException
 class AccountController(
     private val accountService: AccountService,
     private val clientService: ClientService,
-    private val advocateService: AdvocateService,
+    private val psychologistService: PsychologistService,
     private val administratorService: AdministratorService,
     private val accountBalanceTransactionService: AccountBalanceTransactionService
 ) {
@@ -28,7 +28,7 @@ class AccountController(
         if (account != null) {
             return LoginResponse(
                 client = clientService.getByAccount(account),
-                advocate = advocateService.getByAccount(account),
+                psychologist = psychologistService.getByAccount(account),
                 administrator = administratorService.getByAccount(account)
             )
         } else {

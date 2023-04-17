@@ -10,8 +10,8 @@ data class AvailabilityRequest(
     @JsonProperty("end_date")
     val endDate: LocalDate,
     val days: Map<String, List<TimeInterval>>,
-    @JsonProperty("advocate_id")
-    val advocateId: Long,
+    @JsonProperty("psychologist_id")
+    val psychologistId: Long,
 )
 
 data class TimeInterval(

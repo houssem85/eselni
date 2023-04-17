@@ -1,14 +1,13 @@
-package com.programasoft.application.advocate
+package com.programasoft.application.psychologist
 
 import com.programasoft.application.account.Account
-import com.programasoft.application.availability.AvailabilityGroup
 import com.programasoft.application.bankaccount.BankAccount
 import com.programasoft.application.certificate.Certificate
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "advocate")
-data class Advocate(
+@Table(name = "psychologist")
+data class Psychologist(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long,
@@ -28,13 +27,13 @@ data class Advocate(
     val hourlyRate: Float,
     @Column(name = "message_rate")
     val messageRate: Float,
-    @OneToMany(mappedBy = "advocate", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "psychologist", fetch = FetchType.EAGER)
     val certificates: Set<Certificate> = mutableSetOf(),
     @ElementCollection(targetClass = LegalArea::class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
-        name = "advocate_legal_areas",
-        joinColumns = [JoinColumn(name = "advocate_id")]
+        name = "psychologist_legal_areas",
+        joinColumns = [JoinColumn(name = "psychologist_id")]
     )
     @Column(name = "legal_area")
     var legalAreas: Set<LegalArea> = emptySet(),

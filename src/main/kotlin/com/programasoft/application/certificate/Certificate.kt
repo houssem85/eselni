@@ -1,7 +1,6 @@
 package com.programasoft.application.certificate
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.programasoft.application.advocate.Advocate
+import com.programasoft.application.psychologist.Psychologist
 import com.programasoft.application.registrationrequest.RegistrationRequest
 import jakarta.persistence.*
 
@@ -20,6 +19,6 @@ data class Certificate(
     @JoinColumn(name = "registration_request_id")
     val registrationRequest: RegistrationRequest?,
     @ManyToOne
-    @JoinColumn(name = "advocate_id")
-    val advocate: Advocate?
+    @JoinColumn(name = "psychologist_id")
+    val psychologist: Psychologist?
 )

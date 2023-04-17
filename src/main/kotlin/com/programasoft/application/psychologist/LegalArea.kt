@@ -1,4 +1,4 @@
-package com.programasoft.application.advocate
+package com.programasoft.application.psychologist
 
 enum class LegalArea(val id: Int, val displayName: String, val description: String) {
     LABOR_LAW(1, "Droit du travail", "Spécialisé dans les relations entre employeurs et salariés"),

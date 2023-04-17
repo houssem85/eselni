@@ -1,6 +1,6 @@
 package com.programasoft.application.availability
 
-import com.programasoft.application.advocate.AdvocateService
+import com.programasoft.application.psychologist.PsychologistService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +14,7 @@ import java.util.*
 @RequestMapping("/api/v1/availabilities")
 class AvailabilityController(
     private val availabilityService: AvailabilityService,
-    private val advocateService: AdvocateService,
+    private val psychologistService: PsychologistService,
 ) {
 
     @PostMapping
@@ -23,13 +23,13 @@ class AvailabilityController(
         val startDate = request.startDate
         val endDate = request.endDate
 
-        val advocate = advocateService.getById(request.advocateId)
+        val psychologist = psychologistService.getById(request.psychologistId)
 
         val availabilityGroup = AvailabilityGroup(
             id = 0,
             startDate = startDate,
             endDate = endDate,
-            advocate = advocate
+            psychologist = psychologist
         )
 
         val availabilities = arrayListOf<Availability>()
@@ -54,8 +54,8 @@ class AvailabilityController(
             date = date.plusDays(1)
         }
 
-        val oldAvailabilitiesInThisPeriod = availabilityService.getAvailabilitiesForPeriodByAdvocate(
-            start = startDate, end = endDate, advocate = advocate
+        val oldAvailabilitiesInThisPeriod = availabilityService.getAvailabilitiesForPeriodByPsychologist(
+            start = startDate, end = endDate, psychologist = psychologist
         )
 
         val isOverlap = checkAvailabilityOverlap(oldAvailabilitiesInThisPeriod, availabilities)
@@ -138,10 +138,10 @@ class AvailabilityController(
     fun getAvailableDays(
         @RequestParam month: Int,
         @RequestParam year: Int,
-        @RequestParam advocateId: Long
+        @RequestParam psychologistId: Long
     ): ResponseEntity<List<String>> {
-        val advocate = advocateService.getById(advocateId)
-        val availableDays = availabilityService.getAvailableDaysByAdvocateAndMonth(month, year, advocate).map {
+        val psychologist = psychologistService.getById(psychologistId)
+        val availableDays = availabilityService.getAvailableDaysByPsychologistAndMonth(month, year, psychologist).map {
             it.toString()
         }
         return ResponseEntity.ok(availableDays)
@@ -150,10 +150,10 @@ class AvailabilityController(
     @GetMapping("/available-units")
     @ResponseStatus(HttpStatus.OK)
     fun getAvailabilityUnits(
-        @RequestParam("advocateId") advocateId: Long,
+        @RequestParam("psychologistId") psychologistId: Long,
         @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate
     ): List<AvailabilityUnit> {
-        val units = availabilityService.getAvailabilityUnitsByAdvocateAndDate(advocateId, date)
+        val units = availabilityService.getAvailabilityUnitsByPsychologistAndDate(psychologistId, date)
         return units.map {
             it.copy(availability = null)
         }

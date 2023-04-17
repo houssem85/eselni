@@ -6,7 +6,7 @@ import com.programasoft.application.account.AccountService
 import com.programasoft.application.accountbalancetransaction.AccountBalanceTransaction
 import com.programasoft.application.accountbalancetransaction.AccountBalanceTransactionService
 import com.programasoft.application.accountbalancetransaction.TransactionType
-import com.programasoft.application.advocate.AdvocateService
+import com.programasoft.application.psychologist.PsychologistService
 import com.programasoft.application.attachment.AttachmentService
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -19,26 +19,26 @@ class MessageSocketController(
     private val accountService: AccountService,
     private val attachmentService: AttachmentService,
     private val simpleMessagingTemplate: SimpMessagingTemplate,
-    private val advocateService: AdvocateService,
+    private val psychologistService: PsychologistService,
     private val accountBalanceTransactionService: AccountBalanceTransactionService,
     private val firebaseMessaging: FirebaseMessaging
 ) {
 
     @MessageMapping("/message") //6
     fun sendMessage(message: Message) {
-        val advocate = advocateService.getByAccount(message.receiverAccount)
-        val isReceiverAdvocate = advocate != null
-        val isMessageAllowedToBeSent: Boolean = if (isReceiverAdvocate) {
+        val psychologist = psychologistService.getByAccount(message.receiverAccount)
+        val isReceiverPsychologist= psychologist != null
+        val isMessageAllowedToBeSent: Boolean = if (isReceiverPsychologist) {
             val balance = accountBalanceTransactionService.getCurrentBalance(message.senderAccount.id)
-            balance - advocate!!.messageRate >= 0
+            balance - psychologist!!.messageRate >= 0
         } else {
             true
         }
-        if (isReceiverAdvocate && isMessageAllowedToBeSent) {
+        if (isReceiverPsychologist && isMessageAllowedToBeSent) {
             val groupId = UUID.randomUUID().toString()
             val negativeAccountBalanceTransaction = AccountBalanceTransaction(
                 id = 0,
-                amount = advocate!!.messageRate * -1,
+                amount = psychologist!!.messageRate * -1,
                 groupId = groupId,
                 type = TransactionType.MESSAGE_PAYMENT,
                 transactionId = null,
@@ -46,7 +46,7 @@ class MessageSocketController(
             )
             val positiveAccountBalanceTransaction = AccountBalanceTransaction(
                 id = 0,
-                amount = advocate.messageRate,
+                amount = psychologist.messageRate,
                 groupId = groupId,
                 type = TransactionType.MESSAGE_PAYMENT,
                 transactionId = null,

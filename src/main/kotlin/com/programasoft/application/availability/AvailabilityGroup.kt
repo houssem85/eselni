@@ -1,10 +1,9 @@
 package com.programasoft.application.availability
 
-import com.programasoft.application.advocate.Advocate
+import com.programasoft.application.psychologist.Psychologist
 import jakarta.persistence.*
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
-import java.util.*
 
 @Entity
 @Table(name = "availability_group")
@@ -16,6 +15,6 @@ data class AvailabilityGroup(
     @Column(name = "end_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val endDate: LocalDate,
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "advocate_id", referencedColumnName = "id")
-    val advocate: Advocate
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "psychologist_id", referencedColumnName = "id")
+    val psychologist: Psychologist
 )

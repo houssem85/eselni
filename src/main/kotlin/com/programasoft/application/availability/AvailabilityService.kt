@@ -1,13 +1,11 @@
 package com.programasoft.application.availability
 
-import com.programasoft.application.account.Account
-import com.programasoft.application.advocate.Advocate
+import com.programasoft.application.psychologist.Psychologist
 import com.programasoft.application.reservation.Reservation
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.temporal.TemporalAdjusters
 import java.util.*
 
 @Service
@@ -38,28 +36,28 @@ class AvailabilityService(
         availabilityUnitRepository.saveAll(list)
     }
 
-    fun getAvailabilitiesForPeriodByAdvocate(
+    fun getAvailabilitiesForPeriodByPsychologist(
         start: LocalDate,
         end: LocalDate,
-        advocate: Advocate
+        psychologist: Psychologist
     ): List<Availability> {
-        return availabilityRepository.findAvailabilitiesForPeriodByAdvocate(
+        return availabilityRepository.findAvailabilitiesForPeriodByPsychologist(
             start.atStartOfDay(),
             end.atTime(LocalTime.MAX),
-            advocate
+            psychologist
         )
     }
 
-    fun getAvailableDaysByAdvocateAndMonth(month: Int, year: Int, advocate: Advocate): List<Date> {
-        return availabilityUnitRepository.findAvailableDaysByAdvocateAndMonth(
-            advocateId = advocate.id,
+    fun getAvailableDaysByPsychologistAndMonth(month: Int, year: Int, psychologist: Psychologist): List<Date> {
+        return availabilityUnitRepository.findAvailableDaysByPsychologistAndMonth(
+            psychologistId = psychologist.id,
             month = month,
             year = year
         )
     }
 
-    fun getAvailabilityUnitsByAdvocateAndDate(advocateId: Long, date: LocalDate): List<AvailabilityUnit> {
-        return availabilityUnitRepository.findByAdvocateIdAndDate(advocateId, date)
+    fun getAvailabilityUnitsByPsychologistAndDate(psychologistId: Long, date: LocalDate): List<AvailabilityUnit> {
+        return availabilityUnitRepository.findByPsychologistIdAndDate(psychologistId, date)
     }
 
     fun updateAvailabilityUnitReservation(availabilityUnitId: Long, reservation: Reservation): AvailabilityUnit {
