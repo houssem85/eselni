@@ -136,12 +136,10 @@ class AvailabilityController(
 
     @GetMapping("/available-days")
     fun getAvailableDays(
-        @RequestParam month: Int,
-        @RequestParam year: Int,
         @RequestParam psychologistId: Long
     ): ResponseEntity<List<String>> {
         val psychologist = psychologistService.getById(psychologistId)
-        val availableDays = availabilityService.getAvailableDaysByPsychologistAndMonth(month, year, psychologist).map {
+        val availableDays = availabilityService.getAvailableDaysByPsychologistAndMonth(psychologist).map {
             it.toString()
         }
         return ResponseEntity.ok(availableDays)

@@ -5,7 +5,9 @@ import com.programasoft.application.reservation.Reservation
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Service
@@ -48,16 +50,16 @@ class AvailabilityService(
         )
     }
 
-    fun getAvailableDaysByPsychologistAndMonth(month: Int, year: Int, psychologist: Psychologist): List<Date> {
+    fun getAvailableDaysByPsychologistAndMonth(psychologist: Psychologist): List<Date> {
         return availabilityUnitRepository.findAvailableDaysByPsychologistAndMonth(
             psychologistId = psychologist.id,
-            month = month,
-            year = year
         )
     }
 
     fun getAvailabilityUnitsByPsychologistAndDate(psychologistId: Long, date: LocalDate): List<AvailabilityUnit> {
-        return availabilityUnitRepository.findByPsychologistIdAndDate(psychologistId, date)
+        val startDate = LocalDateTime.of(date, LocalTime.MIN)
+        val endDate = LocalDateTime.of(date, LocalTime.MAX)
+        return availabilityUnitRepository.findByPsychologistIdAndDate(psychologistId, startDate, endDate)
     }
 
     fun updateAvailabilityUnitReservation(availabilityUnitId: Long, reservation: Reservation): AvailabilityUnit {

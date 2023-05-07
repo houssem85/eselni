@@ -29,14 +29,14 @@ data class Psychologist(
     val messageRate: Float,
     @OneToMany(mappedBy = "psychologist", fetch = FetchType.EAGER)
     val certificates: Set<Certificate> = mutableSetOf(),
-    @ElementCollection(targetClass = LegalArea::class)
+    @ElementCollection(targetClass = Domain::class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
-        name = "psychologist_legal_areas",
+        name = "psychologist_domain",
         joinColumns = [JoinColumn(name = "psychologist_id")]
     )
     @Column(name = "legal_area")
-    var legalAreas: Set<LegalArea> = emptySet(),
+    var domains: Set<Domain> = emptySet(),
     @OneToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_id")
     val bankAccount: BankAccount,
@@ -69,7 +69,7 @@ data class Psychologist(
 "image": "ZWVn"
 }
 ],
-"legalAreas": [
+"domains": [
 "LABOR_LAW",
 "FAMILY_LAW"
 ],

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Repository
@@ -15,15 +16,12 @@ interface AvailabilityUnitRepository : JpaRepository<AvailabilityUnit, Long> {
                 "FROM AvailabilityUnit au \n" +
                 "JOIN au.availability av \n" +
                 "JOIN av.availabilityGroup ag \n" +
-                "WHERE YEAR(au.start) = :year \n" +
-                "AND MONTH(au.start) = :month \n" +
+                "WHERE au.start > NOW() \n" +
                 "AND au.reservation IS NULL \n" +
                 "AND ag.psychologist.id = :psychologistId"
     )
     fun findAvailableDaysByPsychologistAndMonth(
-        @Param("psychologistId") psychologistId: Long,
-        @Param("year") year: Int,
-        @Param("month") month: Int
+        @Param("psychologistId") psychologistId: Long
     ): List<Date>
 
     @Query(
@@ -33,13 +31,15 @@ interface AvailabilityUnitRepository : JpaRepository<AvailabilityUnit, Long> {
     JOIN au.availability av
     JOIN av.availabilityGroup ag
     WHERE ag.psychologist.id = :psychologistId
-    AND DATE(av.start) = :date
+    AND av.start > :startDate
+    AND av.start < :endDate
     AND au.reservation IS NULL
     """
     )
     fun findByPsychologistIdAndDate(
         @Param("psychologistId") psychologistId: Long,
-        @Param("date") date: LocalDate
+        @Param("startDate") startDate: LocalDateTime,
+        @Param("endDate") endDate: LocalDateTime,
     ): List<AvailabilityUnit>
 
     fun findAllByReservationId(reservationId: Long): List<AvailabilityUnit>
