@@ -44,6 +44,8 @@ class ReservationController(
             it.copy(
                 availabilityUnits = availabilityService.getAvailabilityUnitByReservation(it.id).toSet()
             )
-        }
+        }.sortedWith(compareBy<Reservation> { reservation ->
+            reservation.availabilityUnits.sortedBy { it.start }.firstOrNull()?.start
+        }.thenBy { it.date })
     }
 }
