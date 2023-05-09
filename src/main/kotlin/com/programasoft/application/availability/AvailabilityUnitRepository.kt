@@ -43,4 +43,7 @@ interface AvailabilityUnitRepository : JpaRepository<AvailabilityUnit, Long> {
     ): List<AvailabilityUnit>
 
     fun findAllByReservationId(reservationId: Long): List<AvailabilityUnit>
+
+
+    fun findByReservationId(reservationId: Long): List<AvailabilityUnit>
 }

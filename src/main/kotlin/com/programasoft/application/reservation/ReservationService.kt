@@ -15,4 +15,12 @@ class ReservationService(
     fun getById(id: Long): Reservation {
         return repository.findById(id).orElseThrow { EntityNotFoundException("Reservation with id $id not found") }
     }
+
+    fun getPaidReservationsByClient(clientId: Long): List<Reservation> {
+        return repository.findPaidReservationsByClient(clientId = clientId)
+    }
+
+    fun getNotPaidReservationsByClient(clientId: Long): List<Reservation> {
+        return repository.findNotPaidReservationsByClient(clientId = clientId)
+    }
 }

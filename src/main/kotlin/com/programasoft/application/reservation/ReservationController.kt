@@ -28,4 +28,22 @@ class ReservationController(
             availabilityService.updateAvailabilityUnitReservation(it, newReservation)
         }
     }
+
+    @GetMapping("client/{clientId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getReservationsByClient(
+        @PathVariable("clientId") clientId: Long,
+        @RequestParam isPaid: Boolean = true
+    ): List<Reservation> {
+        val list: List<Reservation> = if (isPaid) {
+            reservationService.getPaidReservationsByClient(clientId)
+        } else {
+            reservationService.getNotPaidReservationsByClient(clientId)
+        }
+        return list.map {
+            it.copy(
+                availabilityUnits = availabilityService.getAvailabilityUnitByReservation(it.id).toSet()
+            )
+        }
+    }
 }

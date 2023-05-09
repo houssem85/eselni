@@ -75,4 +75,10 @@ class AvailabilityService(
     fun getAllByReservationId(reservationId: Long): List<AvailabilityUnit> {
         return availabilityUnitRepository.findAllByReservationId(reservationId)
     }
+
+    fun getAvailabilityUnitByReservation(
+        reservationId: Long
+    ): List<AvailabilityUnit> {
+        return availabilityUnitRepository.findAllByReservationId(reservationId)
+    }
 }
