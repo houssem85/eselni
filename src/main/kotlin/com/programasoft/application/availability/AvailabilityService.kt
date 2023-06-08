@@ -12,9 +12,9 @@ import java.util.*
 
 @Service
 class AvailabilityService(
-    private val availabilityRepository: AvailabilityRepository,
-    private val availabilityUnitRepository: AvailabilityUnitRepository,
-    private val availabilityGroupRepository: AvailabilityGroupRepository,
+        private val availabilityRepository: AvailabilityRepository,
+        private val availabilityUnitRepository: AvailabilityUnitRepository,
+        private val availabilityGroupRepository: AvailabilityGroupRepository,
 ) {
 
 
@@ -39,20 +39,20 @@ class AvailabilityService(
     }
 
     fun getAvailabilitiesForPeriodByPsychologist(
-        start: LocalDate,
-        end: LocalDate,
-        psychologist: Psychologist
+            start: LocalDate,
+            end: LocalDate,
+            psychologist: Psychologist
     ): List<Availability> {
         return availabilityRepository.findAvailabilitiesForPeriodByPsychologist(
-            start.atStartOfDay(),
-            end.atTime(LocalTime.MAX),
-            psychologist
+                start.atStartOfDay(),
+                end.atTime(LocalTime.MAX),
+                psychologist
         )
     }
 
     fun getAvailableDaysByPsychologistAndMonth(psychologist: Psychologist): List<Date> {
         return availabilityUnitRepository.findAvailableDaysByPsychologistAndMonth(
-            psychologistId = psychologist.id,
+                psychologistId = psychologist.id,
         )
     }
 
@@ -64,11 +64,11 @@ class AvailabilityService(
 
     fun updateAvailabilityUnitReservation(availabilityUnitId: Long, reservation: Reservation): AvailabilityUnit {
         val availabilityUnit = availabilityUnitRepository.findById(availabilityUnitId)
-            .orElseThrow { EntityNotFoundException("AvailabilityUnit with id $availabilityUnitId not found") }
+                .orElseThrow { EntityNotFoundException("AvailabilityUnit with id $availabilityUnitId not found") }
         return availabilityUnitRepository.save(
-            availabilityUnit.copy(
-                reservation = reservation
-            )
+                availabilityUnit.copy(
+                        reservation = reservation
+                )
         )
     }
 
@@ -77,8 +77,16 @@ class AvailabilityService(
     }
 
     fun getAvailabilityUnitByReservation(
-        reservationId: Long
+            reservationId: Long
     ): List<AvailabilityUnit> {
         return availabilityUnitRepository.findAllByReservationId(reservationId)
+    }
+
+    fun getAvailabilityGroupsByPsychologist(
+            psychologistId: Long
+    ): List<AvailabilityGroup> {
+        return availabilityGroupRepository.findByPsychologistId(psychologistId).map {
+            it.copy(psychologist = null)
+        }
     }
 }

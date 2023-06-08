@@ -157,4 +157,9 @@ class AvailabilityController(
         }
     }
 
+    @GetMapping("/by-psychologist/{psychologistId}")
+    fun getAvailabilityGroupsByPsychologist(@PathVariable psychologistId: Long): List<AvailabilityGroup> {
+        return availabilityService.getAvailabilityGroupsByPsychologist(psychologistId)
+    }
+
 }

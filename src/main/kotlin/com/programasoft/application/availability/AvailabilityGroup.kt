@@ -16,5 +16,5 @@ data class AvailabilityGroup(
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val endDate: LocalDate,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "psychologist_id", referencedColumnName = "id")
-    val psychologist: Psychologist
+    val psychologist: Psychologist?
 )

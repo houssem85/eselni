@@ -10,7 +10,7 @@ interface ReservationRepository : JpaRepository<Reservation, Long> {
     @Query("SELECT r FROM Reservation r WHERE r.client.id = :clientId AND EXISTS (SELECT t FROM AccountBalanceTransaction t WHERE t.reservation = r)")
     fun findPaidReservationsByClient(clientId: Long): List<Reservation>
 
-    @Query("SELECT r FROM Reservation r WHERE r.client.id = :clientId AND NOT EXISTS (SELECT t FROM AccountBalanceTransaction t WHERE t.reservation = r)")
+    @Query("SELECT r FROM Reservation r WHERE r.client.id = :clientId AND NOT EXISTS (SELECT t FROM AccountBalanceTransaction t WHERE t.reservation = r) AND NOT EXISTS (SELECT t FROM AccountBalanceTransaction t WHERE t.reservation = r) AND NOT EXISTS (SELECT a FROM AvailabilityUnit a WHERE a.reservation = r AND a.start < NOW())")
     fun findNotPaidReservationsByClient(clientId: Long): List<Reservation>
 
 }

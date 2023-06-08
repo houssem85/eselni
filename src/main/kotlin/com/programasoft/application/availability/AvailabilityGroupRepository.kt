@@ -12,4 +12,6 @@ interface AvailabilityGroupRepository : JpaRepository<AvailabilityGroup, Long> {
             "JOIN a.availabilityGroup ag\n" +
             "WHERE ag.id = :groupId AND au.reservation IS NOT NULL")
     fun countReservedAvailabilityUnitsByGroupId(groupId: Long): Int
+
+    fun findByPsychologistId(psychologistId: Long): List<AvailabilityGroup>
 }
