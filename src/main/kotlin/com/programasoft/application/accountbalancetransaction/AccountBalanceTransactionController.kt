@@ -47,7 +47,7 @@ class AccountBalanceTransactionController(
         val psychologist = psychologistService.getPsychologistByAvailabilityUnitId(availabilityUnits.first().id)
         val availabilityUnitRate = psychologist.hourlyRate / 2
         val totalAmountToPay = availabilityUnitRate * availabilityUnits.size
-        val currentClientBalance = accountBalanceTransactionService.getCurrentBalance(client.account.id)
+        val currentClientBalance = accountBalanceTransactionService.getCurrentBalance(client!!.account.id)
         if (totalAmountToPay <= currentClientBalance) {
             val uuid = UUID.randomUUID().toString()
             val negativeAccountBalanceTransaction = AccountBalanceTransaction(

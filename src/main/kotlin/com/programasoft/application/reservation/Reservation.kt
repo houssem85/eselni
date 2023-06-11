@@ -13,7 +13,7 @@ data class Reservation(
     var id: Long,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
-    val client: Client,
+    val client: Client?,
     @Column(name = "date")
     var date: LocalDateTime = LocalDateTime.now(),
     @OneToMany(mappedBy = "reservation", cascade = [CascadeType.ALL], orphanRemoval = true)
