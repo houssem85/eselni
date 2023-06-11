@@ -53,7 +53,7 @@ class ReservationController(
         }.sortedWith(compareBy<Reservation> { reservation ->
             reservation.availabilityUnits.sortedBy { it.start }.firstOrNull()?.start
         }.thenBy { it.date }).map {
-            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH)
+            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd", Locale.ENGLISH)
             val formattedDate: String = it.date.format(formatter)
             var totalDuration = Duration.ZERO
             for (availabilityUnit in it.availabilityUnits) {
