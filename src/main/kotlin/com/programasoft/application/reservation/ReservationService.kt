@@ -2,6 +2,7 @@ package com.programasoft.application.reservation
 
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class ReservationService(
@@ -22,5 +23,17 @@ class ReservationService(
 
     fun getNotPaidReservationsByClient(clientId: Long): List<Reservation> {
         return repository.findNotPaidReservationsByClient(clientId = clientId)
+    }
+
+    fun getPaidReservationsOfCurrentDayByClient(
+        clientId: Long,
+        now: LocalDateTime,
+        startOfDay: LocalDateTime
+    ): List<Reservation> {
+        return repository.findPaidReservationsOfCurrentDayByClient(
+            clientId = clientId,
+            now = now,
+            startOfDay = startOfDay
+        )
     }
 }
