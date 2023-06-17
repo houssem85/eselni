@@ -33,6 +33,7 @@ interface AvailabilityUnitRepository : JpaRepository<AvailabilityUnit, Long> {
     WHERE ag.psychologist.id = :psychologistId
     AND av.start > :startDate
     AND av.start < :endDate
+    AND av.start > NOW()
     AND au.reservation IS NULL
     """
     )

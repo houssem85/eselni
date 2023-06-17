@@ -28,12 +28,34 @@ class ReservationService(
     fun getPaidReservationsOfCurrentDayByClient(
         clientId: Long,
         now: LocalDateTime,
-        startOfDay: LocalDateTime
+        startOfDay: LocalDateTime,
+        endOfDay: LocalDateTime
     ): List<Reservation> {
         return repository.findPaidReservationsOfCurrentDayByClient(
             clientId = clientId,
             now = now,
-            startOfDay = startOfDay
+            startOfDay = startOfDay,
+            endOfDay = endOfDay,
         )
+    }
+
+    fun getPaidReservationsOfCurrentDayByPsychologist(
+        psychologistId: Long,
+        now: LocalDateTime,
+        startOfDay: LocalDateTime,
+        endOfDay: LocalDateTime
+    ): List<Reservation> {
+        return repository.findPaidReservationsOfCurrentDayByPsychologist(
+            psychologistId = psychologistId,
+            now = now,
+            startOfDay = startOfDay,
+            endOfDay = endOfDay,
+        )
+    }
+
+    fun getReservation(
+        reservationId: Long
+    ): Reservation {
+        return repository.getReferenceById(reservationId)
     }
 }

@@ -82,13 +82,15 @@ class ReservationController(
     fun getReadyReservationsByClient(
         @PathVariable("clientId") clientId: Long,
     ): List<ReservationReadyResponse> {
-        val now = LocalDate.of(2023, 6, 21)
+        val now = LocalDate.now()
         val startOfDay = LocalDateTime.of(now, LocalTime.MIN)
+        val endOfDay = LocalDateTime.of(now, LocalTime.MAX)
         val dateTime = LocalDateTime.of(now, LocalDateTime.now().toLocalTime())
         val list = reservationService.getPaidReservationsOfCurrentDayByClient(
             clientId,
             dateTime,
             startOfDay,
+            endOfDay
         )
         val result = list.map {
             val availabilitiyUnits = availabilityService.getAvailabilityUnitByReservation(it.id)
@@ -122,4 +124,64 @@ class ReservationController(
         return result
     }
 
+    @GetMapping("timeEnd/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getTimeEndReservation(
+        @PathVariable("id") reservationId: Long,
+    ): Long {
+        val availabilitiyUnits = availabilityService.getAvailabilityUnitByReservation(reservationId)
+        Collections.sort(availabilitiyUnits) { unit1, unit2 ->
+            unit1.start.compareTo(unit2.start)
+        }
+        val duration = Duration.between(LocalDateTime.now(), availabilitiyUnits.last().end)
+        val diffInMinutes = duration.toMinutes()
+        return diffInMinutes
+    }
+
+    @GetMapping("ready/psychologist/{psychologistId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getReadyReservationsByPsychologist(
+        @PathVariable("psychologistId") psychologistId: Long,
+    ): List<ReservationReadyResponse> {
+        val now = LocalDate.now()
+        val startOfDay = LocalDateTime.of(now, LocalTime.MIN)
+        val endOfDay = LocalDateTime.of(now, LocalTime.MAX)
+        val dateTime = LocalDateTime.of(now, LocalDateTime.now().toLocalTime())
+        val list = reservationService.getPaidReservationsOfCurrentDayByPsychologist(
+            psychologistId,
+            dateTime,
+            startOfDay,
+            endOfDay
+        )
+        val result = list.map {
+            val availabilitiyUnits = availabilityService.getAvailabilityUnitByReservation(it.id)
+            Collections.sort(availabilitiyUnits) { unit1, unit2 ->
+                unit1.start.compareTo(unit2.start)
+            }
+            it.copy(
+                availabilityUnits = availabilitiyUnits.toSet()
+            )
+        }.sortedWith(compareBy<Reservation> { reservation ->
+            reservation.availabilityUnits.sortedBy { it.start }.firstOrNull()?.start
+        }.thenBy { it.date }).map {
+            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd", Locale.ENGLISH)
+            val formattedDate: String = it.availabilityUnits.first().start.toLocalDate().format(formatter)
+            var totalDuration = Duration.ZERO
+            for (availabilityUnit in it.availabilityUnits) {
+                val intervalDuration = Duration.between(availabilityUnit.start, availabilityUnit.end)
+                totalDuration += intervalDuration
+            }
+            ReservationReadyResponse(
+                id = it.id,
+                psychologist = it.availabilityUnits.first().availability?.availabilityGroup?.psychologist?.account?.fullName
+                    ?: "",
+                client = it.client?.account?.fullName ?: "",
+                date = formattedDate,
+                startTime = it.availabilityUnits.first().start.toString().takeLast(5),
+                endTime = it.availabilityUnits.last().end.toString().takeLast(5),
+                isReadyForJoin = it.availabilityUnits.first().start.isBefore(dateTime)
+            )
+        }
+        return result
+    }
 }
